@@ -69,16 +69,13 @@ const view = {
         //回傳正面
         card.classList.remove('back')
         card.innerHTML = this.getCardContent(Number(card.dataset.index))
-
-
+        //紅心方塊上色
         cards.forEach(card => {
           const img = card.getElementsByTagName('img')
           if (img[0].src === 'https://image.flaticon.com/icons/svg/105/105220.svg' || img[0].src === 'https://image.flaticon.com/icons/svg/105/105212.svg') {
             card.classList.add('red')
           }
         })
-
-
         return
       }
       //回傳背面
@@ -128,6 +125,11 @@ const view = {
       card.classList.add('paired')
       card.classList.remove('back')
       card.innerHTML = this.getCardContent(Number(card.dataset.index))
+      //紅心方塊上色
+      const img = card.getElementsByTagName('img')
+      if (img[0].src === 'https://image.flaticon.com/icons/svg/105/105220.svg' || img[0].src === 'https://image.flaticon.com/icons/svg/105/105212.svg') {
+        card.classList.add('red')
+      }
     })
   }
 }
