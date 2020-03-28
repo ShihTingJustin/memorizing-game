@@ -112,12 +112,6 @@ const view = {
     const header = document.querySelector('#header')
     header.before(div)
   },
-  showNewGame() {
-    const div = document.querySelector('.completed')
-    div.remove()
-    model.score = 0
-    view.renderScore(0)
-  },
   flipAllCards() {
     const allCards = document.querySelectorAll('.card')
     allCards.forEach(card => {
@@ -184,9 +178,41 @@ const controller = {
   },
   GodMode() {
     model.score = 260
-    view.renderScore(260)
+    view.renderScore(model.score)
     view.flipAllCards()
     view.showGameFinished()
+    controller.currentState = GAME_STATE.GameFinished
+  },
+  showNewGame() {
+    model.score = 0
+    model.triedTimes = 0
+    view.renderScore(model.score)
+    view.renderTriedTimes(model.triedTimes)
+    const div = document.querySelector('.completed')
+    if (controller.currentState === GAME_STATE.GameFinished) {
+      div.remove()
+    }
+    controller.currentState = GAME_STATE.FirstCardAwaits
+  },
+  setNGandGM() {
+    const godModeBtn = document.querySelector('#GM-btn')
+    godModeBtn.addEventListener('click', () => controller.GodMode())
+
+    const newBtn = document.querySelector('#New-btn')
+    newBtn.addEventListener('click', () => {
+      alert('Start New Game !!!')
+      controller.showNewGame()
+      controller.GameStart()
+    })
+  },
+  GameStart() {
+    controller.currentState = GAME_STATE.FirstCardAwaits
+    controller.generateCards()
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('click', () => {
+        controller.dispatchCardAction(card)
+      })
+    })
   }
 }
 
@@ -201,23 +227,8 @@ const utility = {
   }
 }
 
-function GameStart() {
-  controller.generateCards()
-  document.querySelectorAll('.card').forEach(card => {
-    card.addEventListener('click', () => {
-      controller.dispatchCardAction(card)
-    })
-  })
-  const GodModeBtn = document.querySelector('#GM-btn')
-  GodModeBtn.addEventListener('click', () => controller.GodMode())
 
-  const RestartBtn = document.querySelector('#Re-btn')
-  RestartBtn.addEventListener('click', () => {
-    GameStart()
-    view.showNewGame()
-  })
-}
-
-GameStart()
+controller.GameStart()
+controller.setNGandGM()
 
 
