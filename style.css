@@ -1,11 +1,12 @@
 #cards {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .card {
   flex: 7% 0 1;
-  margin: 2px;
+  margin: 4px;
   border: 2px solid grey;
   display: flex;
   flex-direction: column;
