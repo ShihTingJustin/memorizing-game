@@ -1,0 +1,79 @@
+#cards {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.card {
+  flex: 7% 0 1;
+  margin: 2px;
+  border: 2px solid grey;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 9vw;
+  box-sizing: border-box;
+}
+
+.card img {
+  max-width: 40%;
+  align-self: center;
+}
+
+.card p:last-child {
+  transform: rotate(180deg);
+}
+
+.card p {
+  padding-left: 4px;
+  margin: 0;
+  font-size: 14px;
+}
+
+.back {
+  background: url('https://assets-lighthouse.alphacamp.co/uploads/image/file/9222/ExportedContentImage_00.png');
+  background-size: cover;
+}
+
+.paired {
+  background-color: #dae0e3;
+}
+
+#header {
+  display: flex;
+  margin: 0;
+  flex-direction: column;
+  /* main axis 是直的  */
+  align-items: flex-end;
+  
+  width: 100%;
+}
+
+#header .title {
+  display: flex;
+  width: 100%;
+  /* 未指定 所以主要軸是橫的 */
+  justify-content: flex-end;
+}
+
+#header .title img {
+  max-width: 3em;
+}
+
+#header .title h2 {
+  padding-left: 0.5em;
+}
+
+.wrong {
+  animation: wrongAnimation 0.2s;
+  animation-iteration-count: 5;
+}
+
+@keyframes wrongAnimation {
+  0% {
+
+  }
+
+  to {
+    border: 2px solid #f1c232;
+  }
+}
