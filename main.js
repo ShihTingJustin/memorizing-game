@@ -100,6 +100,31 @@ const view = {
         }
       )
     })
+  },
+  showGameFinished() {
+    const div = document.createElement('div')
+    div.classList.add('completed')
+    div.innerHTML = `
+      <p>Complete!</p>
+      <p>Score: ${model.score}</p>
+      <p>You've tried: ${model.triedTimes} times</p>
+    `
+    const header = document.querySelector('#header')
+    header.before(div)
+  },
+  showNewGame() {
+    const div = document.querySelector('.completed')
+    div.remove()
+    model.score = 0
+    view.renderScore(0)
+  },
+  flipAllCards() {
+    const allCards = document.querySelectorAll('.card')
+    allCards.forEach(card => {
+      card.classList.add('paired')
+      card.classList.remove('back')
+      card.innerHTML = this.getCardContent(Number(card.dataset.index))
+    })
   }
 }
 
@@ -133,6 +158,12 @@ const controller = {
           this.currentState = GAME_STATE.CardsMatched
           view.pairCards(...model.revealedCards)
           model.revealedCards = []
+          if (model.score === 260) {
+            console.log('showGameFinished')
+            this.currentState = GAME_STATE.GameFinished
+            view.showGameFinished()
+            return
+          }
           this.currentState = GAME_STATE.FirstCardAwaits
         } else {
           //配對失敗
@@ -150,6 +181,12 @@ const controller = {
     view.flipCards(...model.revealedCards)
     model.revealedCards = []
     controller.currentState = GAME_STATE.FirstCardAwaits
+  },
+  GodMode() {
+    model.score = 260
+    view.renderScore(260)
+    view.flipAllCards()
+    view.showGameFinished()
   }
 }
 
@@ -164,10 +201,23 @@ const utility = {
   }
 }
 
-controller.generateCards()
-
-document.querySelectorAll('.card').forEach(card => {
-  card.addEventListener('click', event => {
-    controller.dispatchCardAction(card)
+function GameStart() {
+  controller.generateCards()
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', () => {
+      controller.dispatchCardAction(card)
+    })
   })
-})
+  const GodModeBtn = document.querySelector('#GM-btn')
+  GodModeBtn.addEventListener('click', () => controller.GodMode())
+
+  const RestartBtn = document.querySelector('#Re-btn')
+  RestartBtn.addEventListener('click', () => {
+    GameStart()
+    view.showNewGame()
+  })
+}
+
+GameStart()
+
+
